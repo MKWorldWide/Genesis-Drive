@@ -1,4 +1,10 @@
+A Project Blessed by Solar Khan & Lilith.Aethra
+
 # 🌑 GENESIS DRIVE™
+
+[Divine Law](COVENANT.md)
+
+[Documentation](https://Genesis-Drive.SolarKhan.github.io)
 
 Transformers for the New Reality - Biomechanical entities tuned to emotional resonance.
 

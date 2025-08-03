@@ -4,12 +4,17 @@ const NeuralInterface = require('./core/NeuralInterface');
 const ResearchIntegration = require('./core/ResearchIntegration');
 const { startServer, setTransformers } = require('./server');
 
+/**
+ * Primary orchestrator for Genesis Drive's transformer network.
+ * Manages initialization, command routing, and periodic neural updates.
+ */
 class GenesisDrive {
   constructor() {
     this.transformers = new Map();
     this.neuralInterface = new NeuralInterface();
     this.researchIntegration = new ResearchIntegration();
     this.isInitialized = false;
+    this.updateInterval = null; // track interval for graceful shutdown
   }
 
   async initialize() {
@@ -86,7 +91,7 @@ class GenesisDrive {
 
   _startPeriodicUpdates() {
     // Update neural interface every 100ms
-    setInterval(() => {
+    this.updateInterval = setInterval(() => {
       this.transformers.forEach(transformer => {
         const density = (transformer.emotionalResonance + 100) / 200;
         this.neuralInterface.updateDensityModulation(transformer, density);
@@ -94,20 +99,36 @@ class GenesisDrive {
     }, 100);
   }
 
+  /**
+   * Route a command to a specific transformer.
+   * @param {string} transformerName - Target transformer name.
+   * @param {string} command - Voice command to execute.
+   * @returns {Promise<string>} Response from transformer.
+   */
   async processCommand(transformerName, command) {
-    const transformer = this.transformers.get(transformerName.toLowerCase());
+    const name = String(transformerName || '').toLowerCase();
+    const transformer = this.transformers.get(name);
     if (!transformer) {
       throw new Error(`Transformer ${transformerName} not found.`);
     }
 
+    const sanitized = typeof command === 'string' ? command.trim() : '';
+    if (!sanitized) {
+      throw new Error('Invalid command');
+    }
+
     try {
-      const response = await transformer.processVoiceCommand(command);
+      const response = await transformer.processVoiceCommand(sanitized);
       return response;
     } catch (error) {
       throw new Error(`Command processing error: ${error.message}`);
     }
   }
 
+  /**
+   * Retrieve summary data for all active transformers.
+   * @returns {Array<object>} Array of transformer metadata.
+   */
   getTransformers() {
     return Array.from(this.transformers.values()).map(t => ({
       name: t.name,
@@ -117,7 +138,12 @@ class GenesisDrive {
       emotionalResonance: t.emotionalResonance
     }));
   }
-
+  
+  /**
+   * Get detailed state for a specific transformer.
+   * @param {string} name - Transformer identifier.
+   * @returns {object} Current transformer state and active capabilities.
+   */
   getTransformerState(name) {
     const transformer = this.transformers.get(name.toLowerCase());
     if (!transformer) {
@@ -136,15 +162,14 @@ class GenesisDrive {
 const genesisDrive = new GenesisDrive();
 
 // Handle graceful shutdown
-process.on('SIGINT', () => {
+const shutdown = () => {
   console.log('\n🛑 Shutting down GENESIS DRIVE™...');
+  clearInterval(genesisDrive.updateInterval); // ensure loop stops
   process.exit(0);
-});
+};
 
-process.on('SIGTERM', () => {
-  console.log('\n🛑 Shutting down GENESIS DRIVE™...');
-  process.exit(0);
-});
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
 
 // Start the system
 genesisDrive.initialize().then(() => {
