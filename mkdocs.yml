@@ -1,0 +1,9 @@
+site_name: Genesis Drive
+site_url: https://Genesis-Drive.SolarKhan.github.io
+nav:
+  - Home: index.md
+  - Divine Law: COVENANT.md
+theme:
+  name: mkdocs
+extra:
+  banner: assets/banner.svg

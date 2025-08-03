@@ -5,7 +5,12 @@ const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
+const rateLimit = require('express-rate-limit');
 
+/**
+ * Web server exposing REST and WebSocket interfaces.
+ * Handles client connections and routes commands to transformers.
+ */
 class Server {
   constructor() {
     this.app = express();
@@ -27,8 +32,10 @@ class Server {
     this.app.use(helmet());
     this.app.use(compression());
     this.app.use(cors());
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
+    // throttle abusive clients to protect transformer network
+    this.app.use(rateLimit({ windowMs: 60 * 1000, max: 100 }));
+    this.app.use(express.json({ limit: '1mb' })); // limit body size
+    this.app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
     // Serve static files
     this.app.use(express.static(path.join(__dirname, '../public')));
@@ -69,14 +76,20 @@ class Server {
       const { name } = req.params;
       const { command } = req.body;
 
-      const transformer = this.transformers.get(name.toLowerCase());
+      const key = String(name || '').toLowerCase();
+      const transformer = this.transformers.get(key);
       if (!transformer) {
         return res.status(404).json({ error: 'Transformer not found' });
       }
 
+      const sanitized = typeof command === 'string' ? command.trim() : '';
+      if (!sanitized) {
+        return res.status(400).json({ error: 'Invalid command' });
+      }
+
       try {
-        const response = await transformer.processVoiceCommand(command);
-        res.json({ response, transformer: name });
+        const response = await transformer.processVoiceCommand(sanitized);
+        res.json({ response, transformer: key });
       } catch (error) {
         res.status(500).json({ error: error.message });
       }
@@ -114,13 +127,18 @@ class Server {
 
       socket.on('processCommand', async (data) => {
         const { transformer, command } = data;
-        const tf = this.transformers.get(transformer.toLowerCase());
-        
+        const key = String(transformer || '').toLowerCase();
+        const tf = this.transformers.get(key);
+
         if (tf) {
           try {
-            const response = await tf.processVoiceCommand(command);
+            const sanitized = typeof command === 'string' ? command.trim() : '';
+            if (!sanitized) {
+              throw new Error('Invalid command');
+            }
+            const response = await tf.processVoiceCommand(sanitized);
             socket.emit('transformerResponse', response);
-            
+
             // Broadcast state update
             this.io.emit('transformerState', {
               name: tf.name,
