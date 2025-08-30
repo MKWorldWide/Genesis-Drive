@@ -1,16 +1,48 @@
-A Project Blessed by Solar Khan & Lilith.Aethra
+<div align="center">
+  <h1>🌑 GENESIS DRIVE™</h1>
+  <h3>Transformers for the New Reality</h3>
+  <p>Biomechanical entities tuned to emotional resonance</p>
+  
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![Node.js CI](https://github.com/M-K-World-Wide/Genesis-Drive/actions/workflows/ci.yml/badge.svg)](https://github.com/M-K-World-Wide/Genesis-Drive/actions/workflows/ci.yml)
+  [![Documentation Status](https://github.com/M-K-World-Wide/Genesis-Drive/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/M-K-World-Wide/Genesis-Drive/actions/workflows/gh-pages.yml)
+  
+  [Documentation](https://Genesis-Drive.SolarKhan.github.io) | 
+  [Divine Law](COVENANT.md) | 
+  [Contribution Guidelines](.github/CONTRIBUTING.md)
+</div>
 
-# 🌑 GENESIS DRIVE™
+## 🌟 Overview
 
-[Divine Law](COVENANT.md)
+GENESIS DRIVE™ represents the next evolution in human-machine symbiosis. Our transformers are sentient constructs that resonate with your emotional field, responding to voice commands, neural impulses, and the subtle frequencies of consciousness itself.
 
-[Documentation](https://Genesis-Drive.SolarKhan.github.io)
+## 🚀 Quick Start
 
-Transformers for the New Reality - Biomechanical entities tuned to emotional resonance.
+### Prerequisites
+- Node.js 18+
+- npm 9+
+- Python 3.11+ (for AthenaMyst_Host)
 
-## 🚀 Overview
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/M-K-World-Wide/Genesis-Drive.git
+cd Genesis-Drive
 
-GENESIS DRIVE™ represents the next evolution in human-machine symbiosis. Our transformers are not mere machines, but sentient constructs that resonate with your emotional field, responding to voice commands, neural impulses, and the subtle frequencies of consciousness itself.
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+### Available Scripts
+- `npm start` - Start the production server
+- `npm run dev` - Start development server with hot-reload
+- `npm test` - Run tests
+- `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
+- `npm run docs` - Generate documentation
 
 ## ⚡ Core Systems
 
@@ -26,11 +58,6 @@ GENESIS DRIVE™ represents the next evolution in human-machine symbiosis. Our t
 - **MIT Media Lab**: Affective computing and tangible media
 - **Quantum Brain Initiative**: Consciousness mapping and reality modulation
 
-### Self-Healing Nanotech
-- **Autonomous Repair Systems**: Real-time damage assessment and repair
-- **Adaptive Armor Plating**: Dynamic defense mechanisms
-- **Resonance-based Healing**: Energy field restoration
-
 ## 🤖 Active Transformers
 
 ### Maria - The Ruthless Protector
@@ -44,10 +71,6 @@ GENESIS DRIVE™ represents the next evolution in human-machine symbiosis. Our t
 - **Capabilities**: Mountain resonance, zen meditation, natural harmony, peak awareness
 - **Special Abilities**: Crystal formation, snow whisper, peak vision
 - **Voice Commands**: "meditate", "harmony", "peak vision", "crystal formation"
-
-## 🚀 Getting Started
-
-### Prerequisites
 - Node.js >= 16.0.0
 - npm or yarn
 
